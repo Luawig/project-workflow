@@ -25,10 +25,13 @@ For a brand-new, one-sentence idea, the first planning pass should normally crea
 Docs: `draft` | `accepted` | `superseded`.
 
 - `draft`: scope or design is still changing.
-- `accepted`: implementation baseline. After end-to-end delivery, overview, architecture, rules, current product docs, and current service specs must move here.
-- `superseded`: must not be implemented. The top of the file points at the replacement.
+- `accepted`: agreed design and version-commitment baseline. It is not a claim that code has landed. After end-to-end delivery, overview, architecture, rules, product docs, and service specs that describe delivered behavior must move here.
+- `superseded`: must not be implemented. The top of the file points at the replacement, and the file is off the default reading path.
 
-ADRs: `proposed` | `accepted` | `superseded`. Partial replacement stays `accepted` and lists still-valid vs retired clauses at the top.
+When the project uses ADRs: `proposed` | `accepted` | `superseded`.
+
+- A wholly replaced record is `superseded` and points at the replacement.
+- A partially replaced record may stay `accepted` only if the executable Decision section contains solely still-binding clauses. Retired clauses belong in a clearly marked historical appendix that is not construction instruction. A top-of-file note that some clauses were replaced is not enough if retired clauses still remain in Decision. An agent must be able to read only the current Decision section and avoid executing old design.
 
 ## Writing rules
 
@@ -37,17 +40,18 @@ ADRs: `proposed` | `accepted` | `superseded`. Partial replacement stays `accepte
 - Every user story maps to one role and one core scenario.
 - Acceptance criteria must be testable. Do not use "good experience" or "fast enough".
 - Service specs state both responsibilities and non-responsibilities.
-- ADRs record the decision, alternatives, impact, and reversal cost. Not generic background.
-- Third-party references become this project's rules, interfaces, architecture choices, or ADRs.
-- `architecture.md` must split "implemented" and "not yet". `scope.md` and the repo README cite those lists instead of writing a third copy.
+- When the project uses ADRs, they record the decision, alternatives, impact, and reversal cost. Not generic background. Historical appendices are not executable.
+- Third-party references become this project's rules, interfaces, architecture choices, or ADRs. After a reference is rejected or replaced, do not describe it in the present tense as a currently adoptable option; mark it historical, superseded, or do-not-adopt with the reason.
+- `architecture.md` must split "implemented" and "not yet". Implemented matches implementation evidence. Not-yet holds unfinished version commitment. `scope.md` and the repo README cite those lists instead of writing a third copy.
 - Do not say "X is out of scope" in product docs while technical docs or code already delivered X.
-- REST/WS field examples live only in `contracts/`.
+- Do not report later candidates, explicit non-goals, or not-applicable items as implementation gaps.
+- Field-level examples live only in `contracts/`. When those contracts exist, `summary`, `description`, examples, and terms must not retain removed system models.
 
 ## Architecture/Data gate
 
 When architecture, protocol, data, or an ADR is involved:
 
-- The ADR records trade-offs, downsides, and reversal cost.
+- When this design uses an ADR, it records trade-offs, downsides, and reversal cost.
 - Core writes define idempotency and duplicate-request semantics.
 - External-dependency failure has a degradation path.
 - Core entities have states and illegal-transition constraints.
@@ -74,13 +78,13 @@ Use these skeletons only for selected artifacts. Keep the structure of existing 
 draft
 
 ## Current version
-- TODO
+- TODO: capability — delivered | not yet implemented | in progress
 
 ## Out of scope
-- TODO
+- TODO: explicit non-goals; not implementation gaps
 
 ## Later candidates
-- TODO
+- TODO: not this version; not implementation gaps
 
 ## Scope change rules
 RULE-SCOPE-1: New core user scenarios must update the PRD and acceptance criteria.
@@ -182,16 +186,18 @@ draft
 # Docs
 
 ## Reading order
-1. `docs/product/scope.md`
+1. `docs/product/scope.md` — version commitment, non-goals, later candidates
 2. `docs/overview.md`
-3. `docs/architecture.md`
-4. As needed: rules, protocols, services, ADRs
+3. `docs/architecture.md` — implemented / not yet
+4. Stable behavior specs when the project uses them
+5. As needed: rules, protocols, services, ADRs
 
-## Delivered
-- TODO
+## Where facts live
+- Version commitment: `docs/product/scope.md`
+- Implementation status: `docs/architecture.md`
+- Stable behavior: project stable specs (default `openspec/specs/`) when used
 
-## Not yet built
-- TODO
+Do not copy those lists here.
 
 ## Contracts
 - HTTP: `contracts/http/openapi.yaml`
@@ -207,7 +213,7 @@ draft
 draft
 
 ## Scope
-TODO
+See `docs/product/scope.md`.
 
 ## Goals
 - TODO
@@ -247,10 +253,10 @@ TODO
 - Downstream: TODO
 
 ## Implemented
-- TODO
+- TODO: evidenced by code, tests, or contracts
 
 ## Not yet built
-- TODO
+- TODO: unfinished version commitment; not later candidates
 
 ## Architecture rules
 RULE-ARCH-1: TODO
@@ -332,7 +338,10 @@ proposed
 TODO
 
 ## Decision
-TODO
+TODO: only still-binding clauses. Retired clauses do not belong here.
+
+## Historical
+Retired clauses that must not be executed. Leave empty if none.
 
 ## Alternatives
 - Option A: TODO

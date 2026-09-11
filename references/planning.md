@@ -49,7 +49,7 @@ Before stopping:
    - whether the plan is ready for the next checkpoint;
    - the next stage, without starting it.
 
-Do not run implementation verification or delivery closeout. Do not archive the planning work. Leave document status `draft` unless the user explicitly accepts it as an implementation baseline.
+Do not run implementation verification or delivery closeout. Do not archive the planning work. Leave document status `draft` unless the user explicitly accepts it as an implementation baseline. Acceptance as a baseline records version commitment and design. It does not mark capabilities delivered, does not write them into stable specs as ordinary `SHALL`, and does not skip later verification.
 
 ## Resume as delivery
 

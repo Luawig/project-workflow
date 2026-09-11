@@ -31,4 +31,6 @@ Set an explicit locale (for example `en` or `zh-CN`) to pin it.
 
 ## extra_large_triggers
 - TODO: project-specific grade L conditions; delete this section if none
+
+Put project-specific topology, vendors, API paths, technical bans, and business terms in the project's agent instructions, architecture, scope, or this file. This skill does not guess them.
 ```

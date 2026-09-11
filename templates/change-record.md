@@ -13,7 +13,7 @@ TODO: observable done state.
 - TODO
 
 ## Hard constraints
-- TODO: source (Fact / RULE / ADR / user decision)
+- TODO: source (Fact / still-binding RULE or ADR / user decision)
 
 ## Suggestions
 - TODO: adjustable; record why if changed

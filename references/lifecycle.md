@@ -36,7 +36,7 @@ Grade by **consequence**, not by line count.
 
 When unsure, use the higher grade. If a grade S change reveals behavior or contract changes during implementation, upgrade to M/L and complete design and spec before continuing.
 
-Projects may add extra grade L triggers in `docs/change-workflow.md`. Use the table above when that file is absent.
+Projects may add extra grade L triggers in `docs/change-workflow.md`. Use the table above when that file is absent. This skill does not invent project-specific topology, vendors, API paths, technical bans, or business terms.
 
 ## Paths
 
@@ -60,9 +60,9 @@ Create a lightweight change record only when one of these is true:
 - the user asks for one;
 - project rules require one.
 
-Grade S updates long-lived docs only when their current facts changed. Verification runs the smallest relevant test or repeatable check. Closeout checks only affected surfaces and does not fabricate a full completion matrix.
+Grade S updates long-lived docs only when their delivered claims or still-binding rules changed. Verification runs the smallest relevant test or repeatable check. Closeout checks only affected surfaces and does not fabricate a full completion matrix.
 
-M/L default to the OpenSpec-compatible layout. If the project sets `spec_system: change-record`, an equivalent testable change record is required, and closeout must write behavior into long-lived docs.
+M/L default to the OpenSpec-compatible layout. If the project sets `spec_system: change-record`, an equivalent testable change record is required, and closeout must write delivered, evidenced behavior into long-lived docs.
 
 ## Stage contracts
 
@@ -71,7 +71,7 @@ Each stage does only its own work. Do not enter the next stage until the exit co
 ### Triage
 
 - **Entry**: The user proposed a change, or an in-progress change needs re-grading.
-- **Read**: This file. If they exist, read `docs/product/scope.md`, `docs/README.md`, and `AGENTS.md` first. Do not start from intake.
+- **Read**: This file. If they exist, read `docs/product/scope.md`, `docs/README.md`, and `AGENTS.md` first. Do not start from intake. Treat `scope.md` as version commitment, not as proof of implementation.
 - **Output**: Intent, grade, path, target planning checkpoint if applicable, current stage, whether an existing change is reused.
 - **Exit**: Grade and stage are recorded; the next playbook is chosen.
 - **Rollback**: If an existing change conflicts with this request, report first, then merge or open a new change.
@@ -97,7 +97,7 @@ Each stage does only its own work. Do not enter the next stage until the exit co
 - **Entry**: Design is stable, or grade S needs a traceable implementation brief.
 - **Read**: [spec.md](spec.md), [spec-system.md](spec-system.md)
 - **Output**: An OpenSpec-compatible change, or `docs/changes/<name>.md`.
-- **Exit**: Goal, non-goals, hard constraints, acceptance scenarios, and tasks are complete. M/L behavior changes trace to a spec requirement.
+- **Exit**: Goal, non-goals, hard constraints, acceptance scenarios, and tasks are complete. M/L behavior changes trace to a spec requirement. Active-change `SHALL` is planned work for this change, not a stable delivered spec.
 - **Rollback**: If requirements are still moving, stay in Design/Clarify. Do not create a spec.
 
 ### Implement
@@ -120,9 +120,9 @@ Each stage does only its own work. Do not enter the next stage until the exit co
 
 - **Entry**: Verification passed, or the user is reviewing docs / scope / rule consistency.
 - **Read**: [closeout.md](closeout.md), [authority.md](authority.md)
-- **Output**: Specs archived or promoted, scope and entry docs synced, stale current claims removed, completion-surface status.
-- **Exit**: Every applicable surface has a terminal status; no fully completed change remains active; entry docs match scope.
-- **Rollback**: If implementation conflicts with docs or specs and cannot be judged now, mark `pending`. Do not fake a finished closeout.
+- **Output**: Specs archived or promoted only with evidence, version commitment and entry docs synced, stale delivered claims removed, completion-surface status.
+- **Exit**: Every applicable surface has a terminal status; no fully completed change remains active; unimplemented plans are not marked delivered; entry docs match version commitment and implementation status.
+- **Rollback**: If implementation conflicts with docs or specs and cannot be judged now, mark `pending`. Do not fake a finished closeout. Do not keep opposite facts in implementation and stable specs.
 
 ## Gate router
 
@@ -134,7 +134,7 @@ Run a gate only when it triggers. Write conclusions into the target docs or spec
 | Legacy system, migration | Legacy Boundary: anti-corruption layer, dependencies, characterization tests, rollback | architecture, service specs, ADRs, tasks |
 | Architecture, protocol, data, ADR | Architecture/Data: trade-offs, idempotency, degradation, state machines | architecture, protocols, contracts, data-model, rules, ADRs |
 | Concurrency, external deps, auth, untrusted input, high-risk migration | Red-Team: races, downstream failure, malicious input, misleading boundaries | risks, RULE, tests, tasks |
-| Implementation done, scope drift, doc review | Closeout Evidence: code / runtime / spec / docs / rules / residue | scope, stable specs, doc status, AGENTS.md |
+| Implementation done, scope drift, doc review | Closeout Evidence: code / runtime / spec / tests / docs / rules / residue | scope, architecture, stable specs, tests, doc status, AGENTS.md |
 
 Grade S delivery defaults to targeted Verify plus affected-surface closeout. Grade M delivery adds Alignment, and Architecture/Data when interfaces or data are involved. Grade L delivery runs every matching row. Planning runs only gates needed for its requested checkpoint.
 
@@ -144,7 +144,7 @@ When a change spans sessions, progress lives in OpenSpec-compatible `tasks.md` o
 
 A new session reads:
 
-1. `AGENTS.md` and `docs/README.md` / `scope.md`
+1. `AGENTS.md` and `docs/README.md` / `scope.md`. Treat `scope.md` as version commitment, not implementation proof.
 2. The active change or change record
 3. Docs hit by this change
 

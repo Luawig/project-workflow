@@ -2,13 +2,15 @@
 
 Turn a stable design into an implementable, testable spec. If requirements are still moving, return to clarify or design.
 
+An active change may record undelivered requirements as this change's planned behavior. That is not a claim that the behavior is already delivered. Stable specs after archive record only evidenced delivered positive behavior plus currently effective prohibitions. See [spec-system.md](spec-system.md) and [closeout.md](closeout.md).
+
 ## Choose the spec form
 
 | When | Form |
 |---|---|
 | M/L delivery, with the default config | OpenSpec-compatible change |
 | S needing durable coordination or traceability | Lightweight change record |
-| Project sets `spec_system: change-record` | Lightweight change record; write behavior into long-lived docs at closeout |
+| Project sets `spec_system: change-record` | Lightweight change record; write delivered, evidenced behavior into long-lived docs at closeout |
 
 Layout and write order: [spec-system.md](spec-system.md).
 
@@ -23,7 +25,7 @@ Layout and write order: [spec-system.md](spec-system.md).
 | contracts, protocols, data-model, services | specs / `design.md` | Interfaces and data; fields from contracts |
 | Third-party analysis | `design.md` | Adopt, skip, adaptation risk |
 
-Specs must not introduce facts that are not in docs unless marked Assumption or Pending Decision. Do not write product vision as a spec requirement.
+Specs must not introduce facts that are not in docs unless marked Assumption or Pending Decision. Do not write product vision as a spec requirement. Do not write later candidates or explicit non-goals as requirements this change will deliver.
 
 ## Execution contract
 
@@ -31,7 +33,7 @@ Before implementation, the spec must state:
 
 1. **Goal**: observable change when done.
 2. **Non-goals**: what will not be done.
-3. **Hard constraints**: fail if violated; each from a Fact, RULE, ADR, or user decision.
+3. **Hard constraints**: fail if violated; each from a Fact, still-binding RULE or ADR clause, or user decision.
 4. **Suggestions**: may change during implementation if the reason is recorded.
 5. **Acceptance**: commands, test names, or repeatable steps; prefer existing tests, schemas, and contracts.
 6. **Stop conditions**: baseline must not regress; switch after repeated failure; roll back if worse than baseline.
@@ -130,6 +132,10 @@ The system SHALL TODO.
 ```
 
 Every requirement has at least one testable scenario and traces to a `RULE-*` or acceptance criterion.
+
+Active-change `SHALL` statements describe the behavior this change will implement. Do not copy them into the stable spec as unmarked delivered requirements until verification evidence exists. Placeholders such as "add fields, RPCs, or contracts during implementation" are tasks, not stable delivered capabilities.
+
+Currently effective prohibitions may be specified as negative requirements even when no matching feature implementation exists.
 
 ## Lightweight change record
 
