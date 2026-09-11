@@ -11,7 +11,7 @@ description: >-
 
 # Project Workflow
 
-Take a project change from a requirement to a verified implementation, then close out so code, stable specs, project docs, and agent rules point at the same current facts.
+Take a project change from a requirement to a verified implementation, then close out so version commitment, implementation, stable specs, tests, and agent rules stay aligned. A plan is not a delivered capability.
 
 This skill is a change-lifecycle orchestrator. It supports planning-only work as well as delivery. It owns OpenSpec-compatible file conventions and does not use the OpenSpec CLI. Load only the reference files needed for the current stage.
 
@@ -33,13 +33,15 @@ Keep unresolved items as `Open Questions` or `Pending Decisions`. Do not invent 
 
 ## Authority
 
-Read [references/authority.md](references/authority.md). Conflicts must be resolved at closeout:
+Read [references/authority.md](references/authority.md). Do not use an undefined "current" to merge these classes. Conflicts must be resolved at closeout; no class lets the others skip sync.
 
-| Layer | What it represents | Typical location |
+| Class | What it represents | Typical location |
 |---|---|---|
-| Implementation | What the system actually does | Code, tests, `contracts/` |
-| Behavior | Observable, testable behavior | Stable specs (default `openspec/specs/`) |
-| Decisions and context | Scope, motivation, long-lived decisions, agent bounds | `docs/`, `AGENTS.md`, ADRs |
+| Version commitment | What this version plans to deliver, including unfinished items with explicit status | `docs/product/scope.md` |
+| Implementation | What the system actually does, proven by code, tests, machine contracts, or runnable behavior | Code, tests, `contracts/` |
+| Stable behavior | Delivered, verifiable positive behavior, plus currently effective prohibitions | Stable specs (default `openspec/specs/`) |
+| Deferred / non-goals / N/A | Later candidates, explicit non-goals, not-applicable items; not implementation gaps | Scope later / out-of-scope lists |
+| Decisions and constraints | Bounds, trade-offs, long-lived bans; not a substitute for implementation evidence or field contracts | `docs/`, `AGENTS.md`, still-binding ADR clauses |
 
 ## Risk paths
 
@@ -81,6 +83,9 @@ Do not skip these with "code first":
 - Grade M/L must have a spec before implementation: an OpenSpec-compatible change or a recorded lightweight change record.
 - Grade L must have affected design docs or an ADR before spec work.
 - Do not archive, and do not mark docs as delivered, if verification failed.
+- Archive is a closeout step, not proof that delivery is complete.
+- Do not promote unimplemented version-commitment items into stable specs as ordinary `SHALL`.
+- Every positive requirement that enters a stable spec must have proportionate evidence: a test, a machine-contract check, or a reproducible behavior verification.
 - Passing tests or a merged PR is not, by itself, change completion.
 - Destructive cleanup (branches, worktrees, temp artifacts) needs a preview and explicit user confirmation.
 
@@ -103,27 +108,30 @@ Do not write assumptions as facts. Do not silently decide for the user. If a def
 Docs are maintained through the lifecycle, not as a separate upfront phase:
 
 - During clarify, capture Facts and write them into long-lived product or technical docs.
-- During design, record scope, rules, and ADRs. Edit current sections; do not add a parallel version.
-- During spec, point requirements back at rules, interfaces, or decisions in docs.
-- At closeout, promote delivered state into long-lived docs and rewrite or delete stale current claims.
+- During design, record version commitment, rules, and ADRs when used. Edit in place; do not add a parallel version. Split architecture into implemented and not yet.
+- During spec, point requirements back at rules, interfaces, or decisions in docs. Active-change `SHALL` is this change's planned behavior, not a claim that it is already delivered.
+- At closeout, promote only evidenced delivered behavior into stable specs and long-lived docs. Keep unfinished version-commitment items statused. Rewrite or delete stale delivered claims.
 
 Planning may produce only selected documents. Templates are a menu, not a requirement to create the entire tree.
 
-`docs/product/scope.md` is the authority for current vs later. Intake is a source log, not the default reading entry.
+`docs/product/scope.md` is the authority for version commitment versus later candidates and explicit non-goals. It is not proof of implementation. Intake is a source log, not the default reading entry.
 
 ## Quality Gates
 
 - Every `TODO` must say what information is missing.
 - Every `RULE-*` must be checkable. Do not use "try to", "usually", or "appropriately".
-- Third-party references must include a reason not to adopt, or adaptation conditions.
-- Field-level REST/WS authority lives in `contracts/`. `docs/protocols.md` is an interface inventory only.
+- Third-party references must include a reason not to adopt, or adaptation conditions. Rejected or replaced references must not be described in the present tense as currently adoptable.
+- Field-level machine-contract authority lives in `contracts/`. Paths, fields, `summary`, `description`, examples, and terms must match implementation. `docs/protocols.md` is an interface inventory only.
 - Every OpenSpec-compatible `tasks.md` item must trace to the proposal, design, or spec delta.
 - Hard constraints need a fact or user decision as source. Suggestions may change with field evidence if the reason is recorded.
 - Do not pass acceptance by deleting tests, skipping assertions, lowering thresholds, or `|| true`.
+- Stable tests protect delivered behavior and currently effective prohibitions. They must not require deprecated, prohibited, or not-yet-delivered positive behavior.
 - `Open Questions` / `Pending Decisions` must not keep resolved items. A cited `FACT-N` must be defined.
 
 ## Project contract
 
 The consuming project's `AGENTS.md` must name this skill as the required workflow for change requests and must point at the installed copy. The routing text is [templates/agents-block.md](templates/agents-block.md), written by the installing agent. Do not generate a full project `AGENTS.md`. Optional config: [templates/workflow-config.md](templates/workflow-config.md).
+
+This skill is generic. It does not contain a consuming project's service topology, vendors, API paths, technical bans, or business terms. Those belong in the project's agent instructions, architecture docs, scope docs, or optional workflow config. Projects may add extra grade-L triggers in that config; this skill does not guess them.
 
 Install location is agreed between the user and the installing agent. Do not rely on README while executing a change.

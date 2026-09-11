@@ -7,4 +7,4 @@ Requirement clarification, design, spec, implementation, verification, archive, 
 - When the user proposes a product, architecture, protocol, scope, or code change, grade it with that skill and enter the matching stage.
 - Do not update `docs/`, `contracts/`, `openspec/`, or scope claims in this file from chat context alone.
 - Keep unresolved items as Open Questions or Pending Decisions. Do not invent facts.
-- After implementation, verify and close out: archive completed changes and sync `docs/product/scope.md` with the entry docs.
+- After implementation, verify and close out: archive only delivered, evidenced behavior into stable specs; keep unfinished version commitment statused; sync entry docs with `docs/product/scope.md` and architecture implemented / not yet.

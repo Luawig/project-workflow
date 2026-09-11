@@ -1,6 +1,6 @@
 # Clarify
 
-Turn scattered input into facts later stages can cite. Intake is a source log, not the default reading entry. Current scope is `docs/product/scope.md` and `docs/overview.md`.
+Turn scattered input into facts later stages can cite. Intake is a source log, not the default reading entry. Version commitment is `docs/product/scope.md`. Overview holds goals, principles, and terms, not implementation proof.
 
 ## Inputs
 
@@ -16,7 +16,7 @@ Split into five kinds. Do not mix them:
 
 | Kind | Definition | Goes to |
 |---|---|---|
-| Facts | The user stated it, or current docs/code already prove it | PRD, overview, architecture, RULE |
+| Facts | The user stated it as a decision, or docs/code already prove it | `scope.md`, PRD, overview, architecture, RULE; implementation facts need code, tests, contracts, or runtime evidence |
 | Assumptions | Adopted to continue, not yet proven | Assumptions in related docs; never a RULE |
 | Open Questions | Unresolved items that affect scope, architecture, protocol, data, or plan | End of affected docs; do not delete while open |
 | Pending Decisions | Known options waiting on the user | ADR or RULE after confirmation |
@@ -26,9 +26,9 @@ Rules:
 
 - Split "would be nice" into goals, non-goals, acceptance, or an open question.
 - Split "like project X" into concrete capabilities, interaction, technical constraints, and skip points.
-- Put "later" into Pending Decisions. Do not assume approval.
+- Put "later" into Pending Decisions or later candidates. Do not assume approval, and do not report those items as implementation gaps.
 - Keep conflicting statements side by side, prefer the latest user follow-up, and replace superseded Facts.
-- Unverified third-party claims are not Facts.
+- Unverified third-party claims are not Facts. Rejected or replaced references are not currently adoptable solutions.
 
 Grade S does not need `docs/intake.md` when facts are already enough. For M/L, create or update `docs/intake.md` with the template below if the project has no intake log.
 
@@ -74,6 +74,7 @@ draft
 - Superseded FACT: keep one pointer line in the current list. Old body may move to `docs/intake-history.md`.
 - Do not paste the same source twice.
 - Facts must not stay only in intake. After capture, write them into long-lived product or technical docs.
+- User-stated version plans are version commitment, not implementation facts, until code, tests, contracts, or runtime prove them.
 - Do not recopy implementation-time config into overview. Overview keeps only still-needed points and links back.
 
 ## Alignment gate

@@ -26,14 +26,18 @@ Write artifacts in this order:
 3. spec deltas
 4. `tasks.md`
 
-Each artifact must be readable without chat context. Spec deltas must not introduce facts absent from docs unless marked Assumption or Pending Decision.
+Each artifact must be readable without chat context. Spec deltas must not introduce facts absent from docs unless marked Assumption or Pending Decision. Active deltas are not stable specs.
 
 At closeout:
 
-1. Merge deltas into `openspec/specs/<capability>/spec.md`.
-2. Create the capability directory when needed.
-3. Ensure Purpose describes the current capability and contains no placeholder.
-4. Move the change directory to `openspec/changes/archive/<YYYY-MM-DD>-<name>/`.
+1. Merge into `openspec/specs/<capability>/spec.md` only positive requirements that are delivered and evidenced, plus currently effective prohibitions.
+2. Do not merge unimplemented version-commitment items, later candidates, explicit non-goals, or placeholders such as "add fields, RPCs, or contracts during implementation" as ordinary `SHALL`.
+3. Create the capability directory when needed.
+4. Ensure Purpose describes the delivered capability and contains no placeholder.
+5. If a capability is replaced, update the stable spec, default reading order, and entry docs onto one surviving definition. Do not leave two current definitions of the same behavior.
+6. Move the change directory to `openspec/changes/archive/<YYYY-MM-DD>-<name>/`.
+
+Archive is a closeout step. It does not by itself prove delivery. Verification evidence is required first. Every positive requirement that enters the stable spec must have proportionate evidence: a test, a machine-contract check, or a reproducible behavior verification.
 
 ## Lightweight change record
 
@@ -41,7 +45,7 @@ Grade S creates no record by default. Use [templates/change-record.md](../templa
 
 When `spec_system: change-record`, grade M/L also use `docs/changes/<name>.md` instead of the OpenSpec-compatible layout.
 
-After closeout, move completed records to `docs/changes/archive/<YYYY-MM-DD>-<name>.md`. Do not leave completed records in the active directory.
+After closeout, move completed records to `docs/changes/archive/<YYYY-MM-DD>-<name>.md`. Do not leave completed records in the active directory. Write only delivered, evidenced behavior into long-lived docs; keep unfinished version-commitment items statused in `scope.md`.
 
 ## Project config
 
