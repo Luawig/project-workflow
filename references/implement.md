@@ -1,43 +1,28 @@
 # Implement
 
-Change code only after the spec is stable, or after grade S has an execution contract when no change artifact exists. Tasks come from OpenSpec-compatible `tasks.md`, the lightweight change record, or that grade S execution contract, not from a chat summary.
+Implement within the execution contract. Read relevant source, tests and decisions
+before editing. On resumption use [lifecycle](lifecycle.md).
 
-## Before starting
+Advance dependency-ready tasks. Independent investigation and checks may run
+concurrently; shared-file mutations need an owner and integration order. Use
+subagents only when authorized and independence justifies coordination cost.
 
-1. Read the active change proposal / design / tasks, the change record, or the grade S execution contract.
-2. Read the docs, contracts, and tests listed in the spec or execution contract.
-3. Confirm the execution contract still holds: goal, hard constraints, acceptance, stop conditions.
-4. If this spans sessions, continue from the first unchecked task. Do not redo completed work.
+Mark observed task progress, but leave the record active while verification or
+closeout remains. Targeted checks during implementation inform the work; Verify
+assesses the complete contract.
 
-Follow the active task list in order.
+If implementation exposes a design error, stop expanding affected work. Reopen the
+decision, update the contract and invalidate affected evidence before continuing.
+Regrade new consequences. Do not silently broaden scope because extra code exists.
 
-## Rules
+Preserve tests for required behavior. Deleting assertions, widening tolerances or
+disabling gates to manufacture success does not satisfy acceptance. Intentional
+removal needs authorization and corresponding test/spec changes.
 
-- Advance tasks in order. Check each item off as soon as it is done.
-- Hard constraints cannot be broken. Suggestions may change; record why in the task note or change record.
-- Reuse existing tests and contracts as the spec. Do not write a parallel assertion language.
-- On a design error: stop expanding code, update the spec and affected docs, then continue. Order is **change artifact → long-lived docs → code**. Do not write unimplemented work into stable specs as delivered.
-- Drive-by refactors that touch behavior or contracts upgrade the change grade and need spec work.
-- Do not delete, skip, or weaken assertions, or disable gates, to make tests pass.
+After repeated attempts without new information, change hypothesis or investigation
+method. If the next useful action needs unavailable input, record `blocked` with
+reason and resumption action. Do not use an arbitrary failure count instead of
+diagnosis, or roll back unrelated user changes.
 
-## Docs during implementation
-
-Change long-lived docs only when:
-
-- Implementation shows a delivered claim is wrong.
-- Interfaces or state values disagree with `contracts/` or the data model.
-- A still-binding decision is required to continue; when the project uses ADRs, record it as an ADR.
-
-When updating `contracts/`, paths and fields must match implementation, and so must `summary`, `description`, examples, and terms. Do not leave removed system models in that text.
-
-Do not write a construction diary. Progress is the checked-off task list. Do not mark capabilities delivered or archive before verification.
-
-## Done enough to verify
-
-Before verification, the active spec or execution contract must have:
-
-- Planned tasks checked off, or an explicit follow-up change the user agreed to split out.
-- No unrecorded behavior change.
-- New external fields or events present in the active change's contracts or spec deltas.
-
-Then go to [verify.md](verify.md). Do not archive before verification. Do not treat checked-off tasks as a stable delivered spec.
+Before Verify, authorized implementation must be ready, drift recorded and relevant
+tests present. Verification and closeout tasks may remain unchecked.

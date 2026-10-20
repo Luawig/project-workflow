@@ -1,5 +1,15 @@
 # Changelog
 
+## 2.0.0
+
+- Use one recoverable change record for durable work; direct invocation needs no installation.
+- Separate authorization, observed behavior, task progress and completion state.
+- Complete verification and affected knowledge sync before archiving delivery.
+- Add architecture decision probes, risk-triggered review and explicit degraded execution.
+- Replace the Bash checker with a Python standard-library validator and evidence fingerprints.
+- Remove the built-in OpenSpec layout and workflow config. No compatibility or migration tooling is provided.
+- Add deterministic regression tests and reproducible agent evaluation fixtures.
+
 ## 1.0.0
 
 - Planning may stop at a user-selected document checkpoint; delivery continues through spec, implementation, verification, and closeout.

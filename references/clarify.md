@@ -1,87 +1,24 @@
 # Clarify
 
-Turn scattered input into facts later stages can cite. Intake is a source log, not the default reading entry. Version commitment is `docs/product/scope.md`. Overview holds goals, principles, and terms, not implementation proof.
+Resolve unknowns that change the next useful action. Start with the repository
+and existing acceptance sources.
 
-## Inputs
+Separate requirements, observed facts, assumptions, unresolved questions and
+decisions awaiting an owner. A third-party example is not authorization to adopt
+its entire design.
 
-- Goals, constraints, refusals, and priorities stated by the user.
-- Later additions and corrections.
-- Third-party projects, competitors, open-source implementations.
-- Existing README, PRD, design docs, contracts, OpenSpec.
-- Information that would change direction but is not yet known.
+Write goal and bounds in the record or task context. Reference facts instead of
+maintaining a second intake log. Update long-lived product docs only when they
+own the changed requirement.
 
-## Normalize
+Ask when an answer changes goals, acceptance, consequential constraints or an
+irreversible boundary. Present concrete alternatives and effects. Do not ask for
+routine implementation decisions already delegated to the agent.
 
-Split into five kinds. Do not mix them:
+For a reversible assumption, record its basis and invalidation condition; continue
+within scope. Never disguise it as confirmed fact. Technical uncertainty that
+could overturn the solution goes to Design.
 
-| Kind | Definition | Goes to |
-|---|---|---|
-| Facts | The user stated it as a decision, or docs/code already prove it | `scope.md`, PRD, overview, architecture, RULE; implementation facts need code, tests, contracts, or runtime evidence |
-| Assumptions | Adopted to continue, not yet proven | Assumptions in related docs; never a RULE |
-| Open Questions | Unresolved items that affect scope, architecture, protocol, data, or plan | End of affected docs; do not delete while open |
-| Pending Decisions | Known options waiting on the user | ADR or RULE after confirmation |
-| Reference Signals | Third-party adopt / skip / adapt | `docs/references/third-party-analysis.md` |
-
-Rules:
-
-- Split "would be nice" into goals, non-goals, acceptance, or an open question.
-- Split "like project X" into concrete capabilities, interaction, technical constraints, and skip points.
-- Put "later" into Pending Decisions or later candidates. Do not assume approval, and do not report those items as implementation gaps.
-- Keep conflicting statements side by side, prefer the latest user follow-up, and replace superseded Facts.
-- Unverified third-party claims are not Facts. Rejected or replaced references are not currently adoptable solutions.
-
-Grade S does not need `docs/intake.md` when facts are already enough. For M/L, create or update `docs/intake.md` with the template below if the project has no intake log.
-
-## Template
-
-```md
-# Intake
-
-## Status
-draft
-
-## Sources
-- Source 1: TODO
-
-## Facts
-- FACT-1: TODO
-
-## Assumptions
-- ASSUMPTION-1: TODO, because: TODO
-
-## Open Questions
-- QUESTION-1: TODO, affects: scope | architecture | protocol | data model | implementation plan
-
-## Pending Decisions
-- DECISION-1: TODO, options: TODO
-
-## Reference Signals
-
-### Adopt
-- REF-1: TODO
-
-### Do not adopt
-- REF-2: TODO, because: TODO
-
-### Adapt
-- REF-3: TODO, adaptation: TODO
-```
-
-## Maintenance
-
-- Open Questions / Pending Decisions keep only unresolved items. After resolution, delete the item; the content must already be a `FACT-*`, ADR, or `RULE-*`.
-- Each `FACT-N` has exactly one current definition. Do not cite skipped numbers.
-- Superseded FACT: keep one pointer line in the current list. Old body may move to `docs/intake-history.md`.
-- Do not paste the same source twice.
-- Facts must not stay only in intake. After capture, write them into long-lived product or technical docs.
-- User-stated version plans are version commitment, not implementation facts, until code, tests, contracts, or runtime prove them.
-- Do not recopy implementation-time config into overview. Overview keeps only still-needed points and links back.
-
-## Alignment gate
-
-Before leaving this stage on M/L:
-
-- Goals, non-goals, and gray areas are split.
-- Terms and key states are consistent.
-- Each core capability has success, boundary, and exception acceptance intent.
-- Missing information is in Open Questions or Pending Decisions.
+Before leaving, core scenarios need success, boundary and failure acceptance
+intent. Route conflicts through [authority](authority.md). Move resolved questions
+into their requirement or decision owner; keep only actionable unknowns in Recovery.

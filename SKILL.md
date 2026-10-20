@@ -1,137 +1,72 @@
 ---
 name: project-workflow
 description: >-
-  Orchestrates a project change from a requirement through clarification, design,
-  spec, implementation, verification, archive, and documentation sync. Use
-  when the user proposes a product, architecture, protocol, or code change;
-  asks to update PRD, scope, architecture, rules, OpenSpec, AGENTS.md, or
-  project docs; requests implementation of a change; or needs closeout after
-  implementation. Required workflow when AGENTS.md names this skill.
+  Guide a software change through planning or delivery, with proportionate
+  design, acceptance evidence, and recoverable closeout. Use for project
+  planning, implementation, or delivery consistency work, and when project
+  instructions require this workflow.
 ---
 
-# Project Workflow
+# Project workflow
 
-Take a project change from a requirement to a verified implementation, then close out so version commitment, implementation, stable specs, tests, and agent rules stay aligned. A plan is not a delivered capability.
+Deliver the authorized outcome with evidence proportionate to its consequences.
+Planning is a complete outcome when that is what the user requested.
 
-This skill is a change-lifecycle orchestrator. It supports planning-only work as well as delivery. It owns OpenSpec-compatible file conventions and does not use the OpenSpec CLI. Load only the reference files needed for the current stage.
+## Start
 
-Write natural-language prose in the project's existing language. If the project has no established language, match the user's language. Leave code identifiers, paths, field names, APIs, event names, state values, service names, and spec IDs unchanged.
+1. Read project instructions and inspect relevant code, tests and docs. Direct
+   invocation works without installing a project routing block.
+2. Read [lifecycle](references/lifecycle.md) to choose intent, risk, checkpoint
+   and current stage. Reuse a matching active record instead of opening another.
+3. Load only the current stage's guidance below. Existing evidence can satisfy a
+   stage without a new document or another user interaction.
+4. Keep a one-session S task in context. For other work, use one
+   [change record](templates/change-record.md), governed by the
+   [record format](references/record-format.md).
 
-Keep unresolved items as `Open Questions` or `Pending Decisions`. Do not invent facts.
+## Invariants
 
-## Quick Start
+- Implementation does not authorize changing requirements. Resolve conflicts
+  using [authority](references/authority.md), without weakening acceptance.
+- Decide reversible engineering choices within the mandate. Ask when a missing
+  decision changes goals, commitments or an irreversible boundary.
+- Missing evidence stays missing. A checked task, successful command or merged
+  PR does not establish acceptance.
+- Bind verification to relevant code and acceptance. Recheck affected evidence
+  after either changes.
+- Finish verification and affected knowledge sync before completion and archive.
+- Publication, deployment, merge and destructive cleanup follow existing user
+  authorization and platform permissions; completion adds no authority.
 
-1. Confirm this skill is the project's required workflow. Root `AGENTS.md` must point at the installed `SKILL.md`.
-2. Treat the user input as a **change**. Docs, code, architecture, and scope edits are types and risk grades of the same thing.
-3. Determine intent before risk: `planning` or `delivery`. Read [references/planning.md](references/planning.md). A new idea without implementation authorization starts in planning.
-4. Read [references/lifecycle.md](references/lifecycle.md), grade the change, and locate the current stage.
-5. Investigate the repo, existing specs, tests, and docs before asking questions. Ask only what would change scope, risk, or acceptance, and cannot be confirmed from the repo.
-6. For planning, stop at the smallest requested checkpoint and produce only requested documents plus minimum prerequisites.
-7. For delivery, follow the risk path through verification and closeout.
-8. Before implementation, have an execution contract: goal, bounds, hard constraints, acceptance, and stop conditions. Prefer existing tests, schemas, contracts, and specs. Do not copy a parallel spec in prose.
-9. Close delivery with [references/closeout.md](references/closeout.md). Archive is not the finish line.
+## Load by need
 
-## Authority
+| Need | Resource |
+|---|---|
+| Grade, stage, interruption or resumption | [Lifecycle](references/lifecycle.md) |
+| Planning without implementation | [Planning](references/planning.md) |
+| Missing requirements or competing statements | [Clarify](references/clarify.md) |
+| Architecture, costly decisions or uncertainty | [Design](references/design.md) |
+| Acceptance and existing specification changes | [Spec](references/spec.md) |
+| Code changes and dependency scheduling | [Implement](references/implement.md) |
+| Acceptance evidence and failure handling | [Verify](references/verify.md) |
+| Knowledge sync and terminal disposition | [Closeout](references/closeout.md) |
+| Requirements, decisions and implementation disagree | [Authority](references/authority.md) |
+| Create or validate a durable record | [Record format](references/record-format.md) |
+| Requested design document or ADR | [Design templates](templates/design-artifacts.md) |
+| Specification edits or review evidence | [Spec templates](templates/spec-artifacts.md) |
+| Formal project installation | [Routing block](templates/agents-block.md) |
 
-Read [references/authority.md](references/authority.md). Do not use an undefined "current" to merge these classes. Conflicts must be resolved at closeout; no class lets the others skip sync.
+Use the project's document language, otherwise the user's language. Keep code
+identifiers unchanged. Reuse existing document owners, contracts and tests;
+templates are optional shapes, not a required document tree.
 
-| Class | What it represents | Typical location |
-|---|---|---|
-| Version commitment | What this version plans to deliver, including unfinished items with explicit status | `docs/product/scope.md` |
-| Implementation | What the system actually does, proven by code, tests, machine contracts, or runnable behavior | Code, tests, `contracts/` |
-| Stable behavior | Delivered, verifiable positive behavior, plus currently effective prohibitions | Stable specs (default `openspec/specs/`) |
-| Deferred / non-goals / N/A | Later candidates, explicit non-goals, not-applicable items; not implementation gaps | Scope later / out-of-scope lists |
-| Decisions and constraints | Bounds, trade-offs, long-lived bans; not a substitute for implementation evidence or field contracts | `docs/`, `AGENTS.md`, still-binding ADR clauses |
+## Structural checks
 
-## Risk paths
+With Python 3, run this skill's `scripts/validate-workflow.py` as described in
+[record format](references/record-format.md#validation). `project` checks the
+consuming project; `skill` checks this package. These read-only checks do not
+prove requirement coverage or implementation correctness.
 
-Risk grade and intent are independent. Planning may stop after Clarify or Design at any grade. The paths below apply when the user authorizes delivery.
-
-| Grade | When | Path |
-|---|---|---|
-| S | Local change that does not alter user-visible behavior, external contracts, the data model, or scope | Implement → Verify (targeted) → Closeout (affected surfaces only) |
-| M | New capability or user-visible behavior change, or a scope / acceptance change | Clarify → Design (affected docs only) → Spec → Implement → Verify → Closeout |
-| L | Architecture, protocol, data model, migration, security, multi-module, or external-contract change | Full path + extra gates |
-
-Complex changes default to the OpenSpec-compatible file layout in [references/spec-system.md](references/spec-system.md). Grade S creates no change artifact by default. Do not skip required spec work.
-
-## Lifecycle
-
-```text
-Triage → Clarify → Design → Spec → Implement → Verify → Closeout
-```
-
-Entry, outputs, exits, and rollback for each stage: [references/lifecycle.md](references/lifecycle.md). Load the playbook for the current stage:
-
-| Stage | When | File |
-|---|---|---|
-| Plan | The user wants to clarify or design without implementation | [references/planning.md](references/planning.md) |
-| Clarify | New requirements, follow-ups, conflicting statements, third-party references | [references/clarify.md](references/clarify.md) |
-| Design | Scope, product, architecture, rules, protocols, data model, ADRs | [references/design.md](references/design.md) |
-| Spec | Ready to implement, or behavior / contracts will change | [references/spec.md](references/spec.md) |
-| Implement | Spec is stable; code changes start | [references/implement.md](references/implement.md) |
-| Verify | Implementation is done or claimed complete | [references/verify.md](references/verify.md) |
-| Closeout | Verification passed, or the user is reviewing docs / scope consistency | [references/closeout.md](references/closeout.md) |
-
-If an OpenSpec-compatible change or change record is already in progress, continue from its current stage. Do not start a parallel track.
-
-## Hard gates
-
-Do not skip these with "code first":
-
-- Do not implement while direction-changing `Open Questions` / `Pending Decisions` are unresolved.
-- Grade M/L must have a spec before implementation: an OpenSpec-compatible change or a recorded lightweight change record.
-- Grade L must have affected design docs or an ADR before spec work.
-- Do not archive, and do not mark docs as delivered, if verification failed.
-- Archive is a closeout step, not proof that delivery is complete.
-- Do not promote unimplemented version-commitment items into stable specs as ordinary `SHALL`.
-- Every positive requirement that enters a stable spec must have proportionate evidence: a test, a machine-contract check, or a reproducible behavior verification.
-- Passing tests or a merged PR is not, by itself, change completion.
-- Destructive cleanup (branches, worktrees, temp artifacts) needs a preview and explicit user confirmation.
-
-## When to ask
-
-Do not ask what you can look up. Ask at most five questions per round, each with 2–4 options and a recommendation.
-
-Stop and ask when:
-
-- Project type, primary user, or success criteria cannot be judged and would change the design.
-- Mutually exclusive options would change architecture, protocol, data model, or an external contract.
-- A third-party reference is unreachable and the user requires its concrete behavior.
-
-Continue with `TODO` when field names, secondary config, or non-critical copy are missing. Ship a minimal usable artifact and mark the gaps.
-
-Do not write assumptions as facts. Do not silently decide for the user. If a default is required to continue, record it as an Assumption or pending decision and list it in the reply.
-
-## Documentation
-
-Docs are maintained through the lifecycle, not as a separate upfront phase:
-
-- During clarify, capture Facts and write them into long-lived product or technical docs.
-- During design, record version commitment, rules, and ADRs when used. Edit in place; do not add a parallel version. Split architecture into implemented and not yet.
-- During spec, point requirements back at rules, interfaces, or decisions in docs. Active-change `SHALL` is this change's planned behavior, not a claim that it is already delivered.
-- At closeout, promote only evidenced delivered behavior into stable specs and long-lived docs. Keep unfinished version-commitment items statused. Rewrite or delete stale delivered claims.
-
-Planning may produce only selected documents. Templates are a menu, not a requirement to create the entire tree.
-
-`docs/product/scope.md` is the authority for version commitment versus later candidates and explicit non-goals. It is not proof of implementation. Intake is a source log, not the default reading entry.
-
-## Quality Gates
-
-- Every `TODO` must say what information is missing.
-- Every `RULE-*` must be checkable. Do not use "try to", "usually", or "appropriately".
-- Third-party references must include a reason not to adopt, or adaptation conditions. Rejected or replaced references must not be described in the present tense as currently adoptable.
-- Field-level machine-contract authority lives in `contracts/`. Paths, fields, `summary`, `description`, examples, and terms must match implementation. `docs/protocols.md` is an interface inventory only.
-- Every OpenSpec-compatible `tasks.md` item must trace to the proposal, design, or spec delta.
-- Hard constraints need a fact or user decision as source. Suggestions may change with field evidence if the reason is recorded.
-- Do not pass acceptance by deleting tests, skipping assertions, lowering thresholds, or `|| true`.
-- Stable tests protect delivered behavior and currently effective prohibitions. They must not require deprecated, prohibited, or not-yet-delivered positive behavior.
-- `Open Questions` / `Pending Decisions` must not keep resolved items. A cited `FACT-N` must be defined.
-
-## Project contract
-
-The consuming project's `AGENTS.md` must name this skill as the required workflow for change requests and must point at the installed copy. The routing text is [templates/agents-block.md](templates/agents-block.md), written by the installing agent. Do not generate a full project `AGENTS.md`. Optional config: [templates/workflow-config.md](templates/workflow-config.md).
-
-This skill is generic. It does not contain a consuming project's service topology, vendors, API paths, technical bans, or business terms. Those belong in the project's agent instructions, architecture docs, scope docs, or optional workflow config. Projects may add extra grade-L triggers in that config; this skill does not guess them.
-
-Install location is agreed between the user and the installing agent. Do not rely on README while executing a change.
+Without Python or shell access, perform the same field, routing, state and
+archive checks manually. Report automated validation as not run. Keep delivery
+blocked if a required behavior check cannot be performed.

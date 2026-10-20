@@ -1,10 +1,17 @@
-Replace `<skill-path>` with the installed `SKILL.md` path, then write this block into the target project's `AGENTS.md`. Do not overwrite project-specific rules already in `AGENTS.md`.
+# Project installation block
 
-## Project Workflow
+Use only for formal installation. Replace `<skill-path>` with the actual
+project-relative or absolute SKILL.md path. Preserve existing instructions.
+Direct invocation does not require modifying AGENTS.md.
 
-Requirement clarification, design, spec, implementation, verification, archive, and documentation sync for this project MUST follow `<skill-path>`.
+```md
+## Project workflow
 
-- When the user proposes a product, architecture, protocol, scope, or code change, grade it with that skill and enter the matching stage.
-- Do not update `docs/`, `contracts/`, `openspec/`, or scope claims in this file from chat context alone.
-- Keep unresolved items as Open Questions or Pending Decisions. Do not invent facts.
-- After implementation, verify and close out: archive only delivered, evidenced behavior into stable specs; keep unfinished version commitment statused; sync entry docs with `docs/product/scope.md` and architecture implemented / not yet.
+Workflow skill: `<skill-path>`
+
+Use that skill for project planning and delivery. Read existing project
+instructions, commands and requirement owners before selecting its risk path.
+```
+
+The installed route must be outside a code fence. Do not copy these instructions
+or the enclosing fence.
