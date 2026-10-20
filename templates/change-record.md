@@ -1,40 +1,40 @@
-# Change: <kebab-name>
+# Change: <slug>
 
-## Status
-active
-
-## Grade
-S
+## Metadata
+intent: delivery
+grade: M
+stage: triage
+status: active
 
 ## Goal
-TODO: observable done state.
+Describe the observable authorized outcome.
 
 ## Non-goals
-- TODO
+List excluded work, or write none.
 
-## Hard constraints
-- TODO: source (Fact / still-binding RULE or ADR / user decision)
-
-## Suggestions
-- TODO: adjustable; record why if changed
+## Constraints
+List hard constraints and their sources, or write none.
 
 ## Acceptance
-- [ ] TODO: command, test name, or repeatable steps
+- AC-1: Name a test, command or reproducible observation.
 
-## Forbidden shortcuts
-- Do not delete, skip, or weaken tests related to this change in order to pass.
+## Decisions
+Record reasons, authorization sources and consequential assumptions, or write none.
 
 ## Tasks
-- [ ] 1. TODO
-- [ ] 2. Add or update tests
-- [ ] 3. Update affected docs
+- [ ] T1: Implement the authorized change; depends on the execution contract.
+- [ ] T2: Verify AC-1; depends on T1.
+- [ ] T3: Sync affected knowledge and close out; depends on T2.
 
-## Stop conditions
-- Stop and report after 3 consecutive acceptance failures.
-- Roll back and report honestly if the result is worse than the baseline.
+## Recovery
+next_action: Inspect relevant implementation and acceptance sources.
+blocked_reason: none
 
-## Affected docs
-- `docs/product/scope.md`
+## Evidence
+none
 
-## Open Questions
-- TODO
+## Closeout
+verification: pending
+knowledge_sync: pending
+Record affected owners, remaining issues and terminal disposition here.
+For planning, set verification to not-applicable and describe document review.

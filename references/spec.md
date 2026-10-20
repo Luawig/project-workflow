@@ -1,153 +1,49 @@
 # Spec
 
-Turn a stable design into an implementable, testable spec. If requirements are still moving, return to clarify or design.
-
-An active change may record undelivered requirements as this change's planned behavior. That is not a claim that the behavior is already delivered. Stable specs after archive record only evidenced delivered positive behavior plus currently effective prohibitions. See [spec-system.md](spec-system.md) and [closeout.md](closeout.md).
-
-## Choose the spec form
-
-| When | Form |
-|---|---|
-| M/L delivery, with the default config | OpenSpec-compatible change |
-| S needing durable coordination or traceability | Lightweight change record |
-| Project sets `spec_system: change-record` | Lightweight change record; write delivered, evidenced behavior into long-lived docs at closeout |
-
-Layout and write order: [spec-system.md](spec-system.md).
-
-## OpenSpec-compatible mapping
-
-| Source | Target | Content |
-|---|---|---|
-| PRD, scope | `proposal.md` | Motivation, scope, non-goals |
-| Acceptance criteria | `tasks.md` / spec scenarios | Executable acceptance |
-| overview, architecture, ADRs | `design.md` | Bounds, flows, decisions |
-| rules | `design.md` / spec | `RULE-*` |
-| contracts, protocols, data-model, services | specs / `design.md` | Interfaces and data; fields from contracts |
-| Third-party analysis | `design.md` | Adopt, skip, adaptation risk |
-
-Specs must not introduce facts that are not in docs unless marked Assumption or Pending Decision. Do not write product vision as a spec requirement. Do not write later candidates or explicit non-goals as requirements this change will deliver.
+Make acceptance executable using existing tests, contracts and requirement owners.
+Use the record for missing change-specific details without retelling tests.
 
 ## Execution contract
 
-Before implementation, the spec must state:
+Before implementation, identify:
 
-1. **Goal**: observable change when done.
-2. **Non-goals**: what will not be done.
-3. **Hard constraints**: fail if violated; each from a Fact, still-binding RULE or ADR clause, or user decision.
-4. **Suggestions**: may change during implementation if the reason is recorded.
-5. **Acceptance**: commands, test names, or repeatable steps; prefer existing tests, schemas, and contracts.
-6. **Stop conditions**: baseline must not regress; switch after repeated failure; roll back if worse than baseline.
-7. **Forbidden shortcuts**: name deleting tests, skipping assertions, lowering thresholds, or mocking the unit under test to manufacture a pass.
+- Observable goal and non-goals.
+- Hard constraints with user or accepted-decision sources.
+- Acceptance items with stable `AC-*` identifiers and named tests, commands or
+  reproducible observations, including relevant boundaries and failures.
+- Adjustable decisions and reconsideration triggers.
+- Dependency-aware tasks including tests and affected knowledge sync.
+- Stop conditions: mandate violation, invalidated architectural assumption,
+  unavailable essential evidence or repeated attempts without new evidence.
 
-Do not retell test files in prose. Write paths and test names.
+S can keep this in context. Durable work uses [record format](record-format.md).
+Optional shapes are in [spec templates](../templates/spec-artifacts.md).
 
-## OpenSpec-compatible templates
+## Existing specification changes
 
-### `proposal.md`
+This skill does not install or own a spec system. Follow the project's existing
+format and tools. For an existing requirement:
 
-```md
-# Proposal
+1. Identify its owner and baseline, with stable ID or unambiguous heading.
+2. Record `add`, `modify` or `delete`, affected identity and authorizing source.
+   Treat rename as an explicit old-to-new identity map.
+3. Capture the before/after acceptance difference; preserve unrelated requirements.
+4. Compare against the baseline before applying. Resolve concurrent edits instead
+   of overwriting them.
+5. Inspect the consolidated specification, references, retained requirements and
+   affected regression behavior, not just the new text.
 
-## Summary
-TODO
+Keep edits in the existing record; do not create another schema or automatic
+specification merge engine. Evidence supports implementation claims;
+authorization supports changing what is required.
 
-## Motivation
-- TODO
+## Test design
 
-## Scope
-- TODO
+Map acceptance to evidence appropriate to the claim. Schema validation establishes
+structure, not runtime behavior. Preserve the existing baseline unless required
+behavior is explicitly changed.
 
-## Non-goals
-- TODO
-
-## Affected Docs
-- `docs/product/scope.md`
-
-## Open Questions
-- TODO
-```
-
-### `design.md`
-
-```md
-# Design
-
-## Overview
-TODO
-
-## Source Documents
-- `docs/architecture.md`
-
-## Architecture Impact
-- TODO
-
-## Protocol Impact
-- TODO
-
-## Data Model Impact
-- TODO
-
-## Rules
-- RULE-*: TODO
-
-## Decisions
-- ADR-XXXX: TODO
-
-## Risks
-- TODO
-
-## Constraints
-- Hard: TODO
-- Suggestions: TODO
-```
-
-### `tasks.md`
-
-```md
-# Tasks
-
-- [ ] 1. Update contracts or specs: TODO
-- [ ] 2. Implement TODO
-- [ ] 3. Add or update tests: TODO
-- [ ] 4. Update affected docs: TODO
-- [ ] 5. Verify acceptance criteria for TODO
-```
-
-Each item must be completable on its own and trace to the proposal, design, or spec delta. Do not write "implement everything". Include test tasks, not only implementation tasks.
-
-### Spec delta
-
-```md
-# Capability: TODO
-
-## ADDED Requirements
-
-### Requirement: TODO
-The system SHALL TODO.
-
-#### Scenario: TODO
-- GIVEN TODO
-- WHEN TODO
-- THEN TODO
-```
-
-Every requirement has at least one testable scenario and traces to a `RULE-*` or acceptance criterion.
-
-Active-change `SHALL` statements describe the behavior this change will implement. Do not copy them into the stable spec as unmarked delivered requirements until verification evidence exists. Placeholders such as "add fields, RPCs, or contracts during implementation" are tasks, not stable delivered capabilities.
-
-Currently effective prohibitions may be specified as negative requirements even when no matching feature implementation exists.
-
-## Lightweight change record
-
-Grade S does not enter this stage by default. If it needs a durable record under the conditions in [lifecycle.md](lifecycle.md), use [templates/change-record.md](../templates/change-record.md) with a kebab-case name under `docs/changes/`.
-
-## Harness gate
-
-Before leaving this stage:
-
-- Tasks include tests, not only implementation.
-- Happy path, boundary, and exception are covered. Grade L adds concurrency, timeout, or malicious input.
-- Tests default to not using real networks or real third parties.
-- E2E covers only commercially critical paths.
-
-For grade L, also open Red-Team from [lifecycle.md](lifecycle.md): races, downstream failure, malicious input, and boundaries that would mislead a successor in three months.
+Prefer deterministic local checks and controlled dependency doubles. Never mock
+the unit being evaluated. Use end-to-end checks for mission-critical paths,
+including non-commercial projects. Add concurrency, timeout, abuse or migration
+cases when their consequences apply.

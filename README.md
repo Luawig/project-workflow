@@ -1,83 +1,64 @@
 # project-workflow
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
-[![Agent Skills](https://img.shields.io/badge/Agent_Skills-Compatible-8B5CF6)](https://agentskills.io)
+An Agent Skills workflow for authorized software planning and delivery. The entry
+is [SKILL.md](SKILL.md). Start with the requested outcome, apply checks according
+to consequences, and finish with acceptance evidence and recoverable closeout.
 
-Take a project change from a requirement to a verified implementation, then close out so code, stable specs, project docs, and agent rules point at the same current facts.
+## Use
 
-This repository is an [Agent Skills](https://agentskills.io) skill. The agent entry is [`SKILL.md`](./SKILL.md).
+Invoke the skill directly for a change, architecture proposal or delivery review.
+Direct invocation does not modify project instructions. Planning stops at the
+requested checkpoint. Delivery continues through verification and affected
+knowledge sync.
 
-## What it does
+One-session local changes need no workflow artifact. Cross-session work and
+behavioral or high-risk changes use one [change record](templates/change-record.md).
+Existing specs, architecture docs, contracts and tests retain their owners.
+See [record format](references/record-format.md) for persistent state and evidence.
 
-After the user proposes a change, the agent first decides whether the request is planning-only or delivery:
+The skill supports file-based agents without private connectors. Python 3.8+ is
+needed only for the bundled structural checker. Without command execution, follow
+the documented manual checks and report required evidence that remains unavailable.
+Independent agents are optional; shared-context review must be identified as such.
 
-```text
-Planning: Triage → Clarify → optional Design → requested checkpoint → stop
-Delivery: Triage → Clarify → Design → Spec → Implement → Verify → Closeout
-```
+## Install as the project workflow
 
-- Users may request only a PRD, scope, architecture, or another planning checkpoint. An idea alone does not authorize implementation.
-- Small delivery changes create no workflow artifacts by default and still run targeted verification.
-- Complex delivery changes use an OpenSpec-compatible file layout owned by this skill. The OpenSpec CLI is not used.
-- Documentation is maintained throughout, not as a separate upfront phase.
+Copy SKILL.md, references/, templates/, scripts/ and LICENSE to an agreed location,
+then append the [routing block](templates/agents-block.md) to the project's
+AGENTS.md. Replace its path with the actual installed SKILL.md. Preserve all
+project-specific instructions. No separate workflow configuration is required.
 
-## Install
+The skill does not install a specification framework or migrate existing records.
+Current format and command contracts are documented in
+[record format](references/record-format.md#validation).
 
-In Cursor, Claude Code, Codex, or another Agent Skills client:
+## Validate and develop
 
-```text
-Install this skill: https://github.com/Luawig/project-workflow
-```
-
-Or:
+Run from this skill repository:
 
 ```bash
-npx skills add Luawig/project-workflow
+python3 scripts/validate-workflow.py skill .
+python3 -m unittest discover -s tests -v
 ```
 
-You and the agent choose the install location. Prefer a path inside the project when others must reproduce it. Personal skills directories are fine for local trials.
+For an installed consuming project:
 
-The installing agent should:
-
-1. Place `SKILL.md`, `references/`, `templates/`, `scripts/`, and `LICENSE` at the agreed location.
-2. Write [`templates/agents-block.md`](templates/agents-block.md) into the target project's `AGENTS.md`, replacing `<skill-path>` with the actual `SKILL.md` path.
-3. Append or update only that block when `AGENTS.md` already exists. Do not overwrite project-specific rules. If `AGENTS.md` is missing, a minimal file containing only the routing block is enough.
-
-Agents that do not support skills can read [`SKILL.md`](./SKILL.md) as a project rule.
-
-## Usage
-
-After routing is in place, propose the change directly, for example:
-
-```text
-Add CSV export
-Switch login to SSO
-Plan a new project, but do not implement it
-Write only the PRD and scope
-Close out after implementation
+```bash
+python3 <skill-path>/scripts/validate-workflow.py project <project-root>
 ```
 
-Optional config: [`templates/workflow-config.md`](templates/workflow-config.md) → `docs/change-workflow.md` in the project.
+Use `--standalone` for direct invocation without an installation route. The checker
+validates structure, explicit state and fingerprints of listed inputs. It cannot
+prove authorization, test truthfulness, dependency coverage or design quality.
 
-Planning checkpoints: [`references/planning.md`](references/planning.md).
+[Evaluation guide](evals/README.md) contains reproducible tasks and baseline
+provenance. [Evaluation results](evals/results.md) distinguish automated checks,
+agent observations and unmeasured performance.
 
-Spec file conventions: [`references/spec-system.md`](references/spec-system.md). The layout is OpenSpec-compatible, but the OpenSpec CLI is not required and is not used.
-
-## Layout
-
-```text
-SKILL.md       Agent entry
-references/    Stage playbooks
-templates/     AGENTS routing block and optional config
-scripts/       Deterministic checks
-```
-
-## Contributing
-
-- Change the workflow only in `SKILL.md` and the matching `references/` files.
-- Templates and examples must not include personal paths, private project names, or internal service URLs.
-- Skill text describes current behavior only.
+Maintain rules in the main entry and matching references, and keep templates and
+validator behavior synchronized. Do not add personal paths, private project names
+or internal service URLs. History belongs in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
-[MIT](./LICENSE)
+[MIT](LICENSE).

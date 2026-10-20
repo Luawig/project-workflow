@@ -1,151 +1,87 @@
-# Lifecycle and grading
+# Lifecycle
 
-Read this at the start of every change to set grade, current stage, and the next exit. Do not copy the checklists into project docs.
+Choose intent, consequence and evidence before choosing documents. Stages are
+checkpoints; a satisfied checkpoint needs no duplicate work.
 
-## Intent before grade
+## Triage
 
-First classify the request as `planning` or `delivery` with [planning.md](planning.md).
+Read project instructions, relevant document entries, code and tests. Use existing
+locations; no particular product or architecture directory is required. Find
+matching records under `docs/changes/`, including completed records awaiting
+archive. Match by goal and scope rather than recency.
 
-- `planning` may stop at Clarify or Design after the requested documents are coherent. It does not imply permission to implement.
-- `delivery` continues through Spec when required, Implement, Verify, and Closeout.
-- An ambiguous new-project idea starts as planning.
+Record in context, or in a record when required: intent (`planning` or `delivery`),
+authorized outcome, planning checkpoint, grade and reasons, current stage,
+acceptance sources and next action. A new idea alone does not authorize coding.
 
-Intent controls how far to go. Risk grade controls how much rigor is needed within that path.
+## Grade by consequence
 
-## Identify the change
+Use the highest matching grade. Uncertainty matters when it could invalidate the
+main solution, not merely because implementation details are unknown.
 
-Treat requirements, follow-ups, scope edits, design requests, implementation requests, doc sync, and reviews as one change.
+| Grade | Consequences | Required rigor |
+|---|---|---|
+| S | Local change without changing user-visible behavior, external contracts, data model, security boundaries or product scope | Execution contract in context; targeted verification; affected-surface closeout |
+| M | Bounded behavior change using established architecture, with no L trigger | Durable record; acceptance scenarios; relevant regression and contract checks |
+| L | Architecture boundary, external contract, migration, security, irreversible operation, multi-module coupling, or uncertainty that could overturn the solution | Durable record; affected design decisions; risk validation and counterexample review |
 
-Look for in-progress work first to avoid a parallel track:
+Project instructions can add consequence-based gates. Regrade when evidence
+changes consequences; complete missing checks before expanding the work.
 
-1. Non-archive directories under `openspec/changes/`.
-2. Lightweight change records under `docs/changes/` that are not archived.
-3. A change name named by the user.
+## Record policy
 
-If one exists, continue from its unfinished stage when it matches the request. Otherwise enter Triage.
+One-session S work creates no workflow artifact. Cross-session S and all M/L use
+one [record](record-format.md). Persist the contract and next action before a
+foreseeable interruption. Planning M/L also uses a record, but only requested
+planning artifacts are added.
 
-## Grading
-
-Grade by **consequence**, not by line count.
-
-| Grade | Any one of these |
-|---|---|
-| L | Architecture boundary, external protocol, data model, migration, auth/security, multi-module coupling, destructive cleanup, cross-repo contract |
-| M | User-visible behavior, new capability, acceptance criteria, scope, external field semantics, new long-lived rules |
-| S | Everything else: local bugs, refactors, copy, comments, test hardening, doc fixes that do not change a contract |
-
-When unsure, use the higher grade. If a grade S change reveals behavior or contract changes during implementation, upgrade to M/L and complete design and spec before continuing.
-
-Projects may add extra grade L triggers in `docs/change-workflow.md`. Use the table above when that file is absent. This skill does not invent project-specific topology, vendors, API paths, technical bans, or business terms.
-
-## Paths
-
-```text
-Planning: Triage → Clarify → optional Design → requested checkpoint → stop
-S delivery: Triage → Implement → Verify(targeted) → Closeout(affected surfaces)
-M: Triage → Clarify → Design(delta) → Spec → Implement → Verify → Closeout
-L: Triage → Clarify → Design → Spec → Implement → Verify → Closeout
-    + Legacy / Architecture-Data / Red-Team (when triggered)
-```
-
-### Grade S minimum
-
-Grade S creates no intake, design doc, spec, or change record by default. A clear goal and acceptance may stay in the active task context for a one-session local change.
-
-Create a lightweight change record only when one of these is true:
-
-- the work spans sessions;
-- several agents or owners need a shared task list;
-- acceptance or assumptions need a durable audit trail;
-- the user asks for one;
-- project rules require one.
-
-Grade S updates long-lived docs only when their delivered claims or still-binding rules changed. Verification runs the smallest relevant test or repeatable check. Closeout checks only affected surfaces and does not fabricate a full completion matrix.
-
-M/L default to the OpenSpec-compatible layout. If the project sets `spec_system: change-record`, an equivalent testable change record is required, and closeout must write delivered, evidenced behavior into long-lived docs.
+Reference existing docs and tests. Create a separate PRD, architecture document
+or ADR only for a requested artifact or a decision needing a long-lived owner.
+No fixed documentation tree or spec system is installed as a side effect.
 
 ## Stage contracts
 
-Each stage does only its own work. Do not enter the next stage until the exit conditions hold.
+| Stage | Enter when | Exit evidence | On failure |
+|---|---|---|---|
+| Triage | New request or recovery | Intent, grade, mandate, checkpoint and next stage | Resolve conflicting request or missing mandate |
+| Clarify | A consequential requirement or assumption is unclear | Goal, bounds and acceptance intent are usable; remaining unknowns do not block the next action | Investigate or ask the decision owner |
+| Design | An affected decision or technical risk needs work | Quality scenarios, boundaries, decision reasons and risk disposition | Validate the assumption or return to Clarify |
+| Spec | Acceptance or implementation boundaries need definition | Executable goal, non-goals, sourced constraints, acceptance and dependent tasks | Return to unresolved requirement or design |
+| Implement | Execution contract holds | Authorized changes and tests are ready; drift is recorded | Fix locally or reopen affected decision |
+| Verify | Behavior or requested acceptance needs checking | Current evidence for applicable acceptance; failures resolved | Return to Implement/Spec or block on missing environment |
+| Closeout | Verification passed | Affected knowledge consistent; no unapproved deviation; disposition recorded | Keep active or blocked |
 
-### Triage
+Planning ends at the requested Clarify, Design or Spec checkpoint using
+[planning](planning.md). Delivery proceeds to Closeout. S can go directly from
+Triage to Implement when its execution contract is clear.
 
-- **Entry**: The user proposed a change, or an in-progress change needs re-grading.
-- **Read**: This file. If they exist, read `docs/product/scope.md`, `docs/README.md`, and `AGENTS.md` first. Do not start from intake. Treat `scope.md` as version commitment, not as proof of implementation.
-- **Output**: Intent, grade, path, target planning checkpoint if applicable, current stage, whether an existing change is reused.
-- **Exit**: Grade and stage are recorded; the next playbook is chosen.
-- **Rollback**: If an existing change conflicts with this request, report first, then merge or open a new change.
+## State and interruption
 
-### Clarify
+`stage` identifies the checkpoint; `status` is independent of task checkboxes:
 
-- **Entry**: Facts, scope, or decisions are still unclear.
-- **Read**: [clarify.md](clarify.md)
-- **Output**: Facts / Assumptions / Open Questions / Pending Decisions / Reference Signals. Long-lived facts are already in product or technical docs, not only in intake.
-- **Exit**: Direction can continue. Direction-changing questions are resolved or explicitly parked and not needed this stage.
-- **Rollback**: If the user retracts a fact, update Facts and the docs already written. Do not append a "latest version".
+- `active`: an actionable next step exists.
+- `blocked`: progress requires a missing decision, permission, dependency or
+  environment. Record the reason and resumption action. Independent authorized
+  work may continue.
+- `completed`: the requested outcome is satisfied. Planning completes at
+  Clarify/Design/Spec; delivery completes only at Closeout.
+- `cancelled`: the user cancelled or explicitly replaced the request. Record
+  disposition of partial changes; cancellation grants no rollback permission.
 
-### Design
+Before interruption, update stage, status, next action, decisions and evidence
+in the same record. Do not create a parallel progress log.
 
-- **Entry**: Grade M/L, or a grade S upgrade needs scope, architecture, rules, or contract docs.
-- **Read**: [design.md](design.md), [authority.md](authority.md)
-- **Output**: Updates to affected `docs/` and `contracts/`; ADRs when needed.
-- **Exit**: For planning, the requested checkpoint in [planning.md](planning.md) is coherent and the agent stops. For delivery, scope, non-goals, affected components, and rules can support spec work. Grade L delivery must have an architecture or ADR landing.
-- **Rollback**: If design contradicts product scope, change `scope.md` first, then technical docs.
+On resumption:
 
-### Spec
+1. Read project instructions, the matching record and its recovery section, then
+   only the affected sources.
+2. Inspect actual files and workspace changes. Confirm the mandate and
+   consequential assumptions still hold.
+3. Recheck evidence applicability. Changed code, contracts or acceptance
+   invalidate affected evidence.
+4. Continue from stage and next action, not the first unchecked box. All code
+   tasks may be checked while verification is blocked.
+5. If delivery is completed but still active on disk, finish archive after
+   confirming closeout remains valid. Do not repeat implementation.
 
-- **Entry**: Design is stable, or grade S needs a traceable implementation brief.
-- **Read**: [spec.md](spec.md), [spec-system.md](spec-system.md)
-- **Output**: An OpenSpec-compatible change, or `docs/changes/<name>.md`.
-- **Exit**: Goal, non-goals, hard constraints, acceptance scenarios, and tasks are complete. M/L behavior changes trace to a spec requirement. Active-change `SHALL` is planned work for this change, not a stable delivered spec.
-- **Rollback**: If requirements are still moving, stay in Design/Clarify. Do not create a spec.
-
-### Implement
-
-- **Entry**: Spec meets implementation conditions, or grade S has an execution contract.
-- **Read**: [implement.md](implement.md)
-- **Output**: Code and tests advanced by task; tasks checked off; design drift written back to spec and docs.
-- **Exit**: Claimed tasks are checked off, with no unrecorded scope drift.
-- **Rollback**: If implementation exposes a design error, stop coding and return to Spec/Design.
-
-### Verify
-
-- **Entry**: Implementation is claimed complete, or the user asks for acceptance.
-- **Read**: [verify.md](verify.md)
-- **Output**: Evidence run at the change's risk; anti-cheat checks; a list of failures.
-- **Exit**: Applicable gates passed, or failures are reported and the change is not marked complete.
-- **Rollback**: Failures return to Implement. If acceptance itself is wrong, return to Spec.
-
-### Closeout
-
-- **Entry**: Verification passed, or the user is reviewing docs / scope / rule consistency.
-- **Read**: [closeout.md](closeout.md), [authority.md](authority.md)
-- **Output**: Specs archived or promoted only with evidence, version commitment and entry docs synced, stale delivered claims removed, completion-surface status.
-- **Exit**: Every applicable surface has a terminal status; no fully completed change remains active; unimplemented plans are not marked delivered; entry docs match version commitment and implementation status.
-- **Rollback**: If implementation conflicts with docs or specs and cannot be judged now, mark `pending`. Do not fake a finished closeout. Do not keep opposite facts in implementation and stable specs.
-
-## Gate router
-
-Run a gate only when it triggers. Write conclusions into the target docs or spec. Do not paste this table into the project.
-
-| Trigger | Gate | Write back to |
-|---|---|---|
-| New requirement, scope change | Alignment: goals / non-goals / gray areas, terms, success and exception scenarios | intake, product docs, overview |
-| Legacy system, migration | Legacy Boundary: anti-corruption layer, dependencies, characterization tests, rollback | architecture, service specs, ADRs, tasks |
-| Architecture, protocol, data, ADR | Architecture/Data: trade-offs, idempotency, degradation, state machines | architecture, protocols, contracts, data-model, rules, ADRs |
-| Concurrency, external deps, auth, untrusted input, high-risk migration | Red-Team: races, downstream failure, malicious input, misleading boundaries | risks, RULE, tests, tasks |
-| Implementation done, scope drift, doc review | Closeout Evidence: code / runtime / spec / tests / docs / rules / residue | scope, architecture, stable specs, tests, doc status, AGENTS.md |
-
-Grade S delivery defaults to targeted Verify plus affected-surface closeout. Grade M delivery adds Alignment, and Architecture/Data when interfaces or data are involved. Grade L delivery runs every matching row. Planning runs only gates needed for its requested checkpoint.
-
-## Across sessions
-
-When a change spans sessions, progress lives in OpenSpec-compatible `tasks.md` or the lightweight change record task list. Do not create `PROGRESS.md`, `TODO.md`, or `implementation-notes.md` by default.
-
-A new session reads:
-
-1. `AGENTS.md` and `docs/README.md` / `scope.md`. Treat `scope.md` as version commitment, not implementation proof.
-2. The active change or change record
-3. Docs hit by this change
-
-Then continue from the first unfinished task.
+Archived records are history, not proof of the current system.

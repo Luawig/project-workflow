@@ -1,0 +1,25 @@
+{
+  "revision": "f3f11c04d59517f0abfc5ca60a99714f0ba3793b",
+  "files": {
+    "AGENTS.md": "4a383339bbd5b8acc18127db467542c94f80ed8b6c4aa9ea057d0ca35d7d1fc8",
+    "CHANGELOG.md": "c3c109b2c3a08aea7ae1741b297eb2fbc0828583fc3fbea23d5b7c63f7983ab7",
+    "LICENSE": "9dfe090e6e2b066e53835cc6d633a3374793ffce86219805933f147bc9baa5f5",
+    "README.md": "2ce8d6add15c6d83bb0f3955b13cd511e4b0d310a4237dbfad41b43c002b85d3",
+    "SKILL.md": "8262759a429c5cc8f907e40cacc8835cbd7710b8bfd6b5131fbac88a7f0454a2",
+    "references/authority.md": "517aac9846b8ff5f0c4b52cbfec27c06e68a190c1207127404bc43027f41c1ca",
+    "references/clarify.md": "5745866d28899e4ae03076d0a80bf9e2a00b891892557e6bdfc29dcc8e7ffcd2",
+    "references/closeout.md": "fdcfa838c2122ff3ae7327b901cde6e190afdfa85af7c4297cf5e91120413788",
+    "references/design.md": "cc24379ce82ec8a492e0842a2b758931fcca4896bfd6af57262b941288adea61",
+    "references/implement.md": "ec2805d2516087d54982c5e24791596476fba6922dc8ce3f523737e62a6da78f",
+    "references/lifecycle.md": "6e8875f6c69a2fa5728f42dd6018041d6e5fdeb6dda8f27b96843d6d6248e6ce",
+    "references/planning.md": "fd3e148c0403d52f2cd6b68edd29aaabfcf3bfc82e046caf3aedd19237708248",
+    "references/spec-system.md": "f26c01c48ac58a9632ced8fd38b3e93f1de3ed7470e8b5c16eb0c65e7ff320b4",
+    "references/spec.md": "e6ccab5128df6b45ea256d9d1080cd3803fbdb74a9a5490b918b0b933df52d4a",
+    "references/verify.md": "422b357927e18d9ab50df5f99d3dea1e88d243c152d62eeb160c04884c09fc6c",
+    "scripts/validate-project.sh": "40b8204cf6d9080c805b3315b770ad616d4774e9b5163cb41a60ded5cacf4877",
+    "templates/agents-block.md": "434779630c81e692eb201a6db2b7739147c4d65647adfa7f675cd050bf95e23e",
+    "templates/change-record.md": "97645ee0d5fcf7dd634d98d9eea715fc979e1774c550dadb6fb8a72a37e9540a",
+    "templates/workflow-config.md": "05f8c1226c96fe380c211abcaba0686480135c26503385cfa3e2631a455b1e21"
+  },
+  "purpose": "Historical evaluation baseline; not a supported runtime or migration target."
+}
